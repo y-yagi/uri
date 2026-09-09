@@ -79,6 +79,11 @@ class URI::TestCommon < Test::Unit::TestCase
     assert_ractor(<<~RUBY, require: 'uri')
       r = Ractor.new { URI.parse("https://ruby-lang.org/").inspect }
       assert_equal(URI.parse("https://ruby-lang.org/").inspect, r.value)
+
+      r = Ractor.new { [URI::RFC3986_PARSER.inspect, URI::RFC2396_PARSER.inspect] }
+      rfc3986, rfc2396 = r.value
+      assert_match(/URI::RFC3986_Parser/, rfc3986)
+      assert_match(/URI::RFC2396_Parser/, rfc2396)
     RUBY
   end
 
